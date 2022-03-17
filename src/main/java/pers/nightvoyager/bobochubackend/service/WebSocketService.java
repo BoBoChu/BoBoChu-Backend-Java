@@ -2,6 +2,7 @@ package pers.nightvoyager.bobochubackend.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import pers.nightvoyager.bobochubackend.model.Player;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -14,12 +15,12 @@ public class WebSocketService {
 
     @OnOpen
     public void onOpen(Session session) {
-
+        gameService.setPlayer(new Player(session));
     }
 
     @OnClose
     public void onClose() {
-
+        gameService.quitRoom();
     }
 
     @OnMessage

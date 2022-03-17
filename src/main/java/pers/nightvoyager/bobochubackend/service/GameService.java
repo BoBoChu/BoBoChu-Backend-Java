@@ -82,13 +82,15 @@ public class GameService {
     }
 
     public void quitRoom(Player player) {
-        // remove the player from the room
-        room.removePlayer(player);
+        if (room != null) {
+            // remove the player from the room
+            room.removePlayer(player);
 
-        // if the last player in the room quits and thus the room becomes empty, destroy the room
-        if (room.getPlayers().size() == 0)
-            destroyRoom();
+            // if the last player in the room quits and thus the room becomes empty, destroy the room
+            if (room.getPlayers().size() == 0)
+                destroyRoom();
 
-        room = null;
+            room = null;
+        }
     }
 }
