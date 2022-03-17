@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class GameService {
     // thread-save hash map, used to save the room objects
-    private static ConcurrentHashMap<Integer, Room> rooms = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Integer, Room> rooms = new ConcurrentHashMap<>();
 
     public int createNewRoom() {
         // throw exception if no new room can be created
