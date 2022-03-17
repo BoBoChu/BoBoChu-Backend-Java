@@ -15,13 +15,16 @@ public class GameService {
     private static ConcurrentHashMap<Integer, Room> rooms = new ConcurrentHashMap<>();
 
     public int createNewRoom() {
+        // throw exception if no new room can be created
         if (rooms.size() == 1000000)
             throw new GameCannotCreateRoomException("The amount of rooms reaches the upper limit.");
 
+        // generate a six-bit room number randomly
         int roomNumber = (int) (Math.random() * 1000000);
         while (rooms.containsKey(roomNumber))
             roomNumber = (int) (Math.random() * 1000000);
 
+        // instantiate a room and put it in the ConcurrentHashMap
         Room room = new Room(roomNumber);
         rooms.put(roomNumber, room);
 
@@ -34,8 +37,10 @@ public class GameService {
 
     public void joinRoom(int roomNumber, Player player) {
         if (!rooms.containsKey(roomNumber))
+            // throw exception if no room with given room number exists
             throw new GameRoomNotFoundException("Room with number " + roomNumber + " is not found.");
         else
+            // register the player to the room
             rooms.get(roomNumber).addPlayer(player);
     }
 
