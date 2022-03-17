@@ -10,7 +10,7 @@ import javax.websocket.server.ServerEndpoint;
 @Service
 @ServerEndpoint("/api/websocket")
 public class WebSocketService {
-    private static final GameService gameService = new GameService();
+    private final GameService gameService = new GameService();
 
     @OnOpen
     public void onOpen(Session session) {

@@ -14,6 +14,28 @@ public class GameService {
     // thread-save hash map, used to save the room objects
     private static final ConcurrentHashMap<Integer, Room> rooms = new ConcurrentHashMap<>();
 
+    private Room room;
+
+    private Player player;
+
+    public GameService setPlayer(Player player) {
+        this.player = player;
+        return this;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public GameService setRoom(Room room) {
+        this.room = room;
+        return this;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
     public int createNewRoom() {
         // throw exception if no new room can be created
         if (rooms.size() == 1000000)
@@ -25,35 +47,48 @@ public class GameService {
             roomNumber = (int) (Math.random() * 1000000);
 
         // instantiate a room and put it in the ConcurrentHashMap
-        Room room = new Room(roomNumber);
+        room = new Room(roomNumber);
         rooms.put(roomNumber, room);
 
         return roomNumber;
     }
 
+    public void destroyRoom() {
+        destroyRoom(room.getNumber());
+    }
+
     public void destroyRoom(int roomNumber) {
         rooms.remove(roomNumber);
+        room = null;
+    }
+
+    public void joinRoom(int roomNumber) {
+        joinRoom(roomNumber, player);
     }
 
     public void joinRoom(int roomNumber, Player player) {
+        // throw exception if no room with given room number exists
         if (!rooms.containsKey(roomNumber))
-            // throw exception if no room with given room number exists
             throw new GameRoomNotFoundException("Room with number " + roomNumber + " is not found.");
-        else
-            // register the player to the room
-            rooms.get(roomNumber).addPlayer(player);
+
+        // get the room to join
+        room = rooms.get(roomNumber);
+        // register the player to the room
+        room.addPlayer(player);
+    }
+
+    public void quitRoom() {
+        quitRoom(player);
     }
 
     public void quitRoom(Player player) {
-//        rooms.forEach((key, value) -> {
-//            if (value.contains(player))
-//                value.removePlayer(player);
-//        });
-        for (Map.Entry<Integer, Room> entry : rooms.entrySet()) {
-            if (entry.getValue().contains(player)) {
-                entry.getValue().removePlayer(player);
-                return;
-            }
-        }
+        // remove the player from the room
+        room.removePlayer(player);
+
+        // if the last player in the room quits and thus the room becomes empty, destroy the room
+        if (room.getPlayers().size() == 0)
+            destroyRoom();
+
+        room = null;
     }
 }
