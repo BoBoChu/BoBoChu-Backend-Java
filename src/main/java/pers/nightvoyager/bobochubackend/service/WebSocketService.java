@@ -7,6 +7,7 @@ import pers.nightvoyager.bobochubackend.model.Player;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 
 @Component
 @Slf4j
@@ -35,5 +36,17 @@ public class WebSocketService {
     @OnError
     public void onError(Session session, Throwable e) {
         e.printStackTrace();
+    }
+
+    public void sendMessage(String message) throws IOException {
+        gameService.getPlayer().getSession().getBasicRemote().sendText(message);
+    }
+
+    public void sendMessage(Session session, String message) throws IOException {
+        session.getBasicRemote().sendText(message);
+    }
+
+    public void sendMessage(Player player, String message) throws IOException {
+        player.getSession().getBasicRemote().sendText(message);
     }
 }
