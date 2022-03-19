@@ -17,9 +17,10 @@ public class WebSocketService {
     private final GameService gameService = new GameService();
 
     @OnOpen
-    public void onOpen(Session session) {
+    public void onOpen(Session session) throws IOException {
         log.info("A new connection is established");
         gameService.setPlayer(new Player(session));
+        sendMessage("Successfully connected");
     }
 
     @OnClose
