@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import pers.nightvoyager.bobochubackend.model.Player;
+import pers.nightvoyager.bobochubackend.model.Room;
 import pers.nightvoyager.bobochubackend.model.RoomNumberMessage;
 
 import javax.websocket.*;
@@ -61,5 +62,17 @@ public class WebSocketService {
 
     public void sendMessage(Player player, String message) throws IOException {
         player.getSession().getBasicRemote().sendText(message);
+    }
+
+    public void broadcastMessageInRoom(String message) throws IOException {
+        for (Player player : gameService.getRoom().getPlayers()) {
+            sendMessage(player, message);
+        }
+    }
+
+    public void broadcastMessageInRoom(Room room, String message) throws IOException {
+        for (Player player : gameService.getRoom(room.getNumber()).getPlayers()) {
+            sendMessage(player, message);
+        }
     }
 }
