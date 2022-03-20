@@ -30,8 +30,9 @@ public class WebSocketService {
     }
 
     @OnMessage
-    public void onMessage(Session session, String message) {
+    public void onMessage(Session session, String message) throws IOException {
         log.info("Receive message: " + message);
+        sendMessage(gameService.handle(message));
     }
 
     @OnError

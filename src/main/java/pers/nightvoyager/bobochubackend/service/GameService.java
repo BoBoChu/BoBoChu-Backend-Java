@@ -1,5 +1,8 @@
 package pers.nightvoyager.bobochubackend.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import pers.nightvoyager.bobochubackend.exception.GameCannotCreateRoomException;
 import pers.nightvoyager.bobochubackend.exception.GameRoomNotFoundException;
@@ -13,6 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameService {
     // thread-save hash map, used to save the room objects
     private static final ConcurrentHashMap<Integer, Room> rooms = new ConcurrentHashMap<>();
+
+    // used to handle json messages
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private Room room;
 
@@ -92,5 +98,14 @@ public class GameService {
 
             room = null;
         }
+    }
+
+    public String handle(String message) throws JsonProcessingException {
+        Map<String, Object> messageMap = objectMapper.readValue(message, new TypeReference<Map<String, Object>>() {});
+        if (messageMap.containsKey("createRoom")) {
+            int roomNumber = createNewRoom();
+            return Integer.toString(roomNumber);
+        }
+        return "";
     }
 }
