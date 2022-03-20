@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import pers.nightvoyager.bobochubackend.model.NewJoinMessage;
 import pers.nightvoyager.bobochubackend.model.Player;
 import pers.nightvoyager.bobochubackend.model.Room;
 import pers.nightvoyager.bobochubackend.model.RoomNumberMessage;
@@ -42,8 +43,18 @@ public class WebSocketService {
 
         Map<String, Object> messageMap = objectMapper.readValue(message, new TypeReference<Map<String, Object>>() {});
 
-        if (messageMap.containsKey("createRoom"))
-            sendMessage(objectMapper.writeValueAsString(new RoomNumberMessage(gameService.createNewRoom())));
+        if (messageMap.containsKey("createRoom")) {
+            int roomNumber = gameService.createNewRoom();
+            gameService.joinRoom(roomNumber);
+            sendMessage(objectMapper.writeValueAsString(new RoomNumberMessage(roomNumber)));
+            return;
+        }
+
+        if (messageMap.containsKey("joinRoom")) {
+            gameService.joinRoom((Integer) messageMap.get("joinRoom"));
+            broadcastMessageInRoom(objectMapper.writeValueAsString(new NewJoinMessage(gameService.getRoom().getPlayers().size())));
+            return;
+        }
 
     }
 
