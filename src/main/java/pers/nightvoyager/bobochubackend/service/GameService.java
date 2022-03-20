@@ -39,6 +39,12 @@ public class GameService {
         return rooms.get(roomNumber);
     }
 
+    public int createAndJoinRoom() {
+        int roomNumber = createNewRoom();
+        joinRoom(roomNumber);
+        return roomNumber;
+    }
+
     public int createNewRoom() {
         // throw exception if no new room can be created
         if (rooms.size() == 1000000)
