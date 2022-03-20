@@ -8,6 +8,7 @@ import pers.nightvoyager.bobochubackend.exception.GameCannotCreateRoomException;
 import pers.nightvoyager.bobochubackend.exception.GameRoomNotFoundException;
 import pers.nightvoyager.bobochubackend.model.Player;
 import pers.nightvoyager.bobochubackend.model.Room;
+import pers.nightvoyager.bobochubackend.model.RoomNumberMessage;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -102,10 +103,10 @@ public class GameService {
 
     public String handle(String message) throws JsonProcessingException {
         Map<String, Object> messageMap = objectMapper.readValue(message, new TypeReference<Map<String, Object>>() {});
-        if (messageMap.containsKey("createRoom")) {
-            int roomNumber = createNewRoom();
-            return Integer.toString(roomNumber);
-        }
+
+        if (messageMap.containsKey("createRoom"))
+            return objectMapper.writeValueAsString(new RoomNumberMessage(createNewRoom()));
+
         return "";
     }
 }
