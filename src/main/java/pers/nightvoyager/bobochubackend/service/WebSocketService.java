@@ -54,6 +54,10 @@ public class WebSocketService {
             return;
         }
 
+        if (messageMap.containsKey("start") && gameService.getPlayer().equals(gameService.getRoom().getPlayers().get(0))) {
+            broadcastMessageInRoom(message);
+            return;
+        }
     }
 
     @OnError
