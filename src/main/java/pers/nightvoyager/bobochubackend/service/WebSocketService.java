@@ -44,7 +44,7 @@ public class WebSocketService {
         Map<String, Object> messageMap = objectMapper.readValue(message, new TypeReference<Map<String, Object>>() {});
 
         if (messageMap.containsKey("createRoom")) {
-            sendMessage(objectMapper.writeValueAsString(new RoomNumberMessage(gameService.createAndJoinRoom())));
+            sendMessage(objectMapper.writeValueAsString(new RoomNumberMessage(gameService.createAndJoinRoom((String) messageMap.get("createRoom")))));
             return;
         }
 

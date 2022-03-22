@@ -4,13 +4,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Room {
     private int number;
+    private String difficulty;
     private CopyOnWriteArrayList<Player> players = new CopyOnWriteArrayList<>();
 
     public Room() {
-    }
-
-    public Room(int number) {
-        this.number = number;
     }
 
     public int getNumber() {
@@ -19,6 +16,15 @@ public class Room {
 
     public Room setNumber(int number) {
         this.number = number;
+        return this;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public Room setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
         return this;
     }
 

@@ -39,13 +39,13 @@ public class GameService {
         return rooms.get(roomNumber);
     }
 
-    public int createAndJoinRoom() {
-        int roomNumber = createNewRoom();
+    public int createAndJoinRoom(String difficulty) {
+        int roomNumber = createNewRoom(difficulty);
         joinRoom(roomNumber);
         return roomNumber;
     }
 
-    public int createNewRoom() {
+    public int createNewRoom(String difficulty) {
         // throw exception if no new room can be created
         if (rooms.size() == 1000000)
             throw new GameCannotCreateRoomException("The amount of rooms reaches the upper limit.");
@@ -56,7 +56,7 @@ public class GameService {
             roomNumber = (int) (Math.random() * 1000000);
 
         // instantiate a room and put it in the ConcurrentHashMap
-        room = new Room(roomNumber);
+        room = new Room().setNumber(roomNumber).setDifficulty(difficulty);
         rooms.put(roomNumber, room);
 
         return roomNumber;
